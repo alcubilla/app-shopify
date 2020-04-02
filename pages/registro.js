@@ -1,28 +1,30 @@
-import { Page, FormLayout, TextField, Button, useCallback } from '@shopify/polaris'
+import { Page, FormLayout, TextField, Button } from '@shopify/polaris'
 import React, { useState } from 'react'
 
 
 const Registro = () => {
+
     const [shop, setShop] = useState();
     const[legal, setLegal] =useState();
     const[phone, setPhone] = useState();
     const [email, setEmail] = useState();
     const[creditcart, setCreditCard] = useState();
+    
+    const handleSave = ()=>{
+       console.log('Datos:', shop, legal, phone, email, creditcart)
+    }  
 
-    const handleChange = ((newValue) => setValue(newValue), []);
-
-return(
-    <Page fullWidth={false}>
-        <FormLayout>
-             <TextField label="Nombre de la tienda" value={value} onChange={handleChange}  />
-             <TextField label="Nombre del representante legal" onChange={() => {setLegal=TextField.value}} />
-             <TextField label="Telefóno" onChange={() => {setPhone=TextField.value}} />
-            <TextField type="email" label="Email" onChange={() => {setEmail= TextField.value}} />
-            <TextField label="Tarjeta de crédito" onChange={() => {setCreditCard = TextField.value}} />
-            <Button onClick = {console.log(shop,legal,phone, email,creditcart)}>Guardar</Button>
-        </FormLayout>   
-    </Page>
-)
-
+    return(
+        <Page fullWidth={false}>
+            <FormLayout>
+                <TextField label="Nombre de la tienda" value={shop} onChange={(newValue) => setShop(newValue)}  />
+                <TextField label="Nombre del representante legal" value={legal} onChange={(newValue) => setLegal(newValue)} />
+                <TextField label="Telefóno" value={phone} onChange={(newValue) => setPhone(newValue)} />
+                <TextField type="email" label="Email" value={email} onChange={(newValue) => setEmail(newValue)} />
+                <TextField label="Tarjeta de crédito" value={creditcart} onChange={(newValue) => setCreditCard(newValue)} />
+                <Button onClick ={handleSave} >  Guardar </Button>
+            </FormLayout>   
+        </Page>
+    ) 
 }
 export default Registro
