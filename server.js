@@ -14,7 +14,7 @@ const app = next({dev});
 const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_KEY, SHOPIFY_API_SECRET_KEY } = process.env;
-    
+
 
 app.prepare().then(()=>{
 
@@ -39,7 +39,6 @@ app.prepare().then(()=>{
                     secure: true,
                     sameSite: 'none'
                 });
-                console.log('Lo logramos', accessToken)
 
 
                 //ctx.cookies.set('accessToken', accessToken, { httpOnly: false });
@@ -53,6 +52,7 @@ app.prepare().then(()=>{
     server.use(async (ctx)=>{
         await handle(ctx.req, ctx.res)
         ctx.respond = false;
+        console.log('async')
         ctx.res.statusCode = 200;
         return
     });
