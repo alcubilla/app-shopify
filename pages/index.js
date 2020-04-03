@@ -1,14 +1,24 @@
 import { Page, Layout, Card, Button, Stack } from '@shopify/polaris'
 import { TitleBar, ResourcePicker } from '@shopify/app-bridge-react'
-import React, { useState } from 'react'
-import Link from 'next/link'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 //const img = 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg';
 
 
 const Index = () => { 
     
-    
+    useEffect(()=>{
+        axios.get('/api/shopify')
+        .then(response=>{
+            console.log('Exitoso', response)
+        }, error=>{
+            console.log('error', error)
+        })
+       // .catch( err =>alert(`${err} no encontrado`)) 
+
+    },[])
+
     const [open, setOpen] = useState(false)
     const handleSelection = (resources)=>{
         setOpen(false)
@@ -47,7 +57,7 @@ const Index = () => {
                     <Card title="Envia productos a revisión" sectioned>
                         <Stack>
                             <Stack>
-                               <Button fullWidth={true}> <Link href="/registro"> Registro  </Link> </Button> 
+                               <Button fullWidth={true} url={'./registro'}> Registro </Button> 
                                <Button fullWidth={true} onClick={()=>setOpen(true)}> Revisión</Button> 
                                <Button fullWidth={true} > Registro</Button>  
                             </Stack>
