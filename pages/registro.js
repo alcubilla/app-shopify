@@ -14,8 +14,6 @@ const Registro = () => {
        console.log('Datos:', shop, legal, phone, email, creditcart)
     }  
 
-    
-
     return(
         <Page fullWidth={false}>
             <Form onSubmit = {handleSubmit}>
@@ -52,7 +50,6 @@ const Registro = () => {
                         <Stack distribution="trailing">
                              <Button primary submit> Guardar </Button>
                         </Stack>
-            
 
                     </Layout.Section>
                 </FormLayout>   
