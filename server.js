@@ -55,7 +55,7 @@ app.prepare().then(()=>{
     server.use(async (ctx)=>{
         await handle(ctx.req, ctx.res)
         ctx.respond = false;
-        console.log('async')
+        //console.log('async')
         ctx.res.statusCode = 200;
         return
     });

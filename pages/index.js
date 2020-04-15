@@ -1,75 +1,24 @@
-import { Page, Layout, Card, Button, Stack } from '@shopify/polaris'
-import { TitleBar, ResourcePicker } from '@shopify/app-bridge-react'
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+//container de redux
 
-//const img = 'https://cdn.shopify.com/s/files/1/0757/9955/files/empty-state.svg';
+import { connect } from 'react-redux'
+import Home from '../components/Home'
+import {shopifystoreOperations} from '../store/shopifystore'
 
+//conectar componente con el container
+const mapStateToProps = state=>({
+        shop_is_loading: state.shopify.shop_is_loading,
+        shop_exists: state.shopify.shop_exists, 
+        shop_status: state.shopify.shop_status
 
-const Index = () => { 
-    
-    useEffect(()=>{
-        axios.get('/api/shopify')
-        .then(response=>{
-            console.log('Exitoso', response)
-        }, error=>{
-            console.log('error', error)
-        })
-       // .catch( err =>alert(`${err} no encontrado`)) 
-
-    },[])
-
-    const [open, setOpen] = useState(false)
-    const handleSelection = (resources)=>{
-        setOpen(false)
-        console.log(resources)
-    }
-    
-    return (
-        <Page fullWidth={false}>
-
-            <TitleBar
-                primaryAction={{
-                    content: 'Registro'
-                }}
-            />
-            <ResourcePicker
-                resourceType="Product"
-                showVariants={false}
-                open={open}
-                onSelection={handleSelection}
-                onCancel={()=> setOpen(false)}
-            />
-
-            <Layout>
-                
-                <Layout.Section>
-                    <Card title="Home" sectioned>
-                        <Stack>
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>          
-
-                            <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>          
-                        </Stack>
-                    </Card>
-                </Layout.Section>
-
-                <Layout.Section secondary>
-                    <Card title="Envia productos a revisión" sectioned>
-                        <Stack>
-                            <Stack>
-                               <Button fullWidth={true} url={'./registro'}> Registro </Button> 
-                               <Button fullWidth={true} onClick={()=>setOpen(true)}> Revisión</Button> 
-                               <Button fullWidth={true} > Registro</Button>  
-                            </Stack>
-                        </Stack>
-
-                    </Card>
-                </Layout.Section>
-
-            </Layout>
-        </Page>    
-    )
-}
+})
 
 
-export default Index
+const mapDispatchToProps = dispatch =>({
+    getShopifyData: () => dispatch(shopifystoreOperations.getShopifyData())
+})
+
+//conecto con Home
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Home)

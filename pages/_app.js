@@ -9,10 +9,35 @@ import '@shopify/polaris/styles.css' //agregamos estilos
 import translations from '@shopify/polaris/locales/en.json'
 import Cookies from 'js-cookie'
 
+import axios from 'axios'
+axios.defaults.baseURL = API_URL
+
+
+//importo utilerias de redux
+import thunk from 'redux-thunk'
+import {createStore, applyMiddleware} from 'redux'
+import { Provider as ReduxProvider }  from 'react-redux'
+import withRedux from 'next-redux-wrapper'
+import reducer from '../store'
+import {composeWithDevTools} from 'redux-devtools-extension'
+
+
+//construyo el store
+const midlewares = [thunk]
+const makeStore = (initialState, options)=>{
+    return createStore(
+        reducer,
+        initialState,
+        composeWithDevTools(applyMiddleware(...midlewares))
+    )
+}
+
+
+
 class MyApp extends App{
     
     render(){
-        const { Component, pageProps } = this.props;
+        const { Component, pageProps, store} = this.props;
         const config = { 
             apiKey: API_KEY, 
             shopOrigin: Cookies.get('shopOrigin'), 
@@ -26,9 +51,11 @@ class MyApp extends App{
                 </Head>
 
                 <Provider config={config}>
-                    <AppProvider i18n={translations}>
-                        <Component {...pageProps} />
-                    </AppProvider>
+                    <ReduxProvider store={store}>
+                        <AppProvider i18n={translations}>
+                            <Component {...pageProps} />
+                        </AppProvider>
+                    </ReduxProvider>
                 </Provider>
                             
             </React.Fragment>
@@ -38,4 +65,4 @@ class MyApp extends App{
    
 }
 
-export default MyApp
+export default withRedux(makeStore)(MyApp)
