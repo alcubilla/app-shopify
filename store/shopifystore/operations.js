@@ -9,6 +9,12 @@ import Creators from './actions'
 // funciones que uso internamente en este archivo 
 // pero qude el componente no necesita ejecutar
 const _saveShopifyData = Creators.saveShopifyData
+const _shopExist= Creators.shopExist
+const _shopNotExist=Creators.shopNotExist
+const _isLoading=Creators.isLoading
+const _isNotLoading= Creators.isNotLoading
+const _setError = Creators.setError
+const clearError = Creators.clearError
 
 
 
@@ -22,33 +28,57 @@ const getShopifyData = () => {
             baseURL: '/api',
             timeout: 5000
         })
-        return instanceShopify.get(`/shopify`)
+        return instanceShopify.get('/shopify')
             .then ( response =>{
                 const { shop } = response.data
                 dispatch(_saveShopifyData(shop))
-
-
                 const { id } = shop
                 axios.get(`/store/${id}`)
-                    .then( response =>{
+                .then( response =>{
+                    
+                    dispatch(_shopExist(response.data))
 
-                    }, error=>{
+                }, error=>{
+
+                    dispatch(_shopNotExist())
 
 
 
+                })
 
-                    })
             }, error =>{
 
 
 
                 
-            })
+        })
         
 
     }
 }
 
+const createShop = (payload)=>{
+    return(dispatch)=>{
+        dispatch(_isLoading())
+
+        axios.post('/store', payload)
+            .then(response=>{
+                dispatch(_shopExist(response.data))
+            }, err=>{
+                dispatch(_shopNotExist())
+
+                switch(err.response.status){
+                    case 400:
+                        dispatch(_setError('ERROR DE VALIDACION, VERIFIQUE SUS DATOS'))
+                        break;
+                    default:
+                        dispatch(_setError('ERROR DE SERVIDOR'))
+                }
+
+            })
+
+    }
+}
 
 
 
@@ -58,5 +88,7 @@ const getShopifyData = () => {
 // es decir tienen comunicacion con el exterior
 
 export default {
-    getShopifyData
+    getShopifyData,
+    createShop,
+    clearError
 }

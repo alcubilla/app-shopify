@@ -3,7 +3,7 @@ export default async(req, res)=>{
     
     const tmp = req.headers.cookie.split('; ').reduce(function(result, v, i, a) { var k = v.split('='); result[k[0]] = k[1]; return result; }, {})
     //console.log('mi galleta',tmp)
-    console.log('mi req', req)
+    //console.log('mi req', req)
 
 
     const headers =  {headers: { 'x-shopify-access-token': tmp.accessToken }} 
