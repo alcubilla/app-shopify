@@ -3,6 +3,7 @@
 
 import axios from 'axios'
 import Creators from './actions'
+import VariantsCreators from '../variant/actions'
 
 
 //A-----------------------------------
@@ -15,6 +16,7 @@ const _isLoading=Creators.isLoading
 const _isNotLoading= Creators.isNotLoading
 const _setError = Creators.setError
 const clearError = Creators.clearError
+const _setVariants = VariantsCreators.setVariants
 
 
 
@@ -37,6 +39,7 @@ const getShopifyData = () => {
                 .then( response =>{
                     
                     dispatch(_shopExist(response.data))
+                    dispatch(_setVariants(response.data.variants))
 
                 }, error=>{
 

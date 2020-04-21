@@ -10,12 +10,15 @@ const Index = ({
     shop_is_loading, 
     shop_exists, 
     shop_status, 
-    getShopifyData 
+    getShopifyData,
+    reviewVariants
 }) => {
 
     useEffect(()=>{
 
         getShopifyData()
+
+
 
     },[])//Se ejecuta 1 sola vez al montarse el componente
 
@@ -26,7 +29,56 @@ const Index = ({
 
     const handleSelection = (resources)=>{
         setOpen(false)
-        //console.log(resources)        
+
+        let payload=[]
+        resources.selection.forEach( product =>{
+            const {
+                id: product_id,
+                title: product_title,
+                images,
+                vendor
+
+            }= product
+
+            const variants = product.variants.map( variant =>{
+                const {
+                    id: variant_id,
+                    title: variant_title,
+                    weight: variant_weight,
+                    weightUnit: variant_unit,
+                    price: variant_price
+                } = variant
+
+                return{
+                    product_id,
+                    product_title,
+                    product_image: images.length>0 ? images[0].originalSrc : undefined,
+                    vendor,
+
+
+                    variant_id,
+                    variant_title,
+                    variant_weight,
+                    variant_unit,
+                    variant_price, 
+                    variant_recommended_price: 0,
+                    tax: 0,
+                    status: 'Calculando'    
+                }            
+            })
+
+
+        payload = [...payload, ...variants]
+
+
+        })
+
+
+        console.log('payload', payload)
+
+
+        reviewVariants({variants: payload})
+        console.log(resources)        
     }
 
     let accionBotones = <Spinner accessibilityLabel="Spinner example" size="large" color="teal" />
@@ -36,7 +88,7 @@ const Index = ({
             <Card sectioned>                        
                             
                 <Button fullWidth={true} onClick={()=>router.push('/registro')} disabled={shop_exists===true}>Registro</Button>
-                <Button fullWidth={true} onClick={ () => setOpen(true)} disabled={shop_exists===false}>Enviar productos a revisión</Button>                            
+                <Button fullWidth={true} onClick={ () => setOpen(true)} disabled={shop_exists===false || shop_status=='en_revision'}>Enviar productos a revisión</Button>                            
                         
             </Card>
        

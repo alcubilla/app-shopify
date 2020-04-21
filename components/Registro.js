@@ -4,6 +4,7 @@ import { useRouter}  from 'next/router'
 
 
 
+
 const Registro = ({
     shop_is_loading,
     shop_exists,
@@ -23,7 +24,7 @@ const Registro = ({
     const [email, setEmail] = useState(shop.customer_email);
     const[tarjeta, setTarjeta] = useState('');
 
-    const [store,setStore] = useState();
+    
     
     const handleSubmit= ()=>{
         
