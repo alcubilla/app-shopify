@@ -14,7 +14,9 @@ const mapStateToProps = state=>({
 
 const mapDispatchToProps = dispatch =>({
     getShopifyData: () => dispatch(shopifystoreOperations.getShopifyData()),
+    solveVariant: (id) => dispatch(variantOperations.solveVariant(id)),
    
+
 })
 
 //conecto con Home

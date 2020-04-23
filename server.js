@@ -8,13 +8,13 @@ const session = require('koa-session')
 
 dotenv.config();
 
-
 const port = parseInt(process.env.PORT, 10) || 3000;
 const dev = process.env.NODE_ENV !== 'production';
 const app = next({dev});
 const handle = app.getRequestHandler();
 
 const { SHOPIFY_API_KEY, SHOPIFY_API_SECRET_KEY } = process.env;
+
 
 
 app.prepare().then(()=>{
@@ -41,10 +41,11 @@ app.prepare().then(()=>{
                     sameSite: 'none'
                 });
 
+
                 ctx.cookies.set('accessToken', accessToken, { 
                     httpOnly: false,
-                    secure:true,
-                    sameSite:'none'
+                    secure: true,
+                    sameSite: 'none'
                 });
 
                 ctx.redirect('/');
@@ -56,7 +57,6 @@ app.prepare().then(()=>{
     server.use(async (ctx)=>{
         await handle(ctx.req, ctx.res)
         ctx.respond = false;
-        //console.log('async')
         ctx.res.statusCode = 200;
         return
     });

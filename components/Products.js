@@ -1,10 +1,14 @@
-import { Page, FooterHelp, Link, ResourceList, ResourceItem, Avatar, Card, TextStyle } from '@shopify/polaris'
+import { Page, FooterHelp, Link, ResourceList, ResourceItem, 
+        Avatar, Card, TextStyle, Stack, Badge, Button } from '@shopify/polaris'
 import { useEffect } from 'react'
+
+import ResolveConflict from '../containers/ResolveConflict'
 
 
 
 const Products = ({
     getShopifyData,
+    solveVariant,
 
     variant_is_loading,
     variants
@@ -18,7 +22,7 @@ const Products = ({
 
     },[]) //Se ejecuta 1 sola vez al montarse el componente
 
-console.log('variants', variants)
+
 
 const resourceName = {
     singular: 'variant',
@@ -30,21 +34,58 @@ const resourceName = {
         const {
             _id: id, 
             product_title: Title,
+            variant_title,
             product_image: image_url,
             final_price = 0,
             status,
-            final_duty = 0
+            tax_calculated: final_duty
         } = item
 
-        const media = <Avatar customer size = "medium" source={image_url}/>
+        let statusColor = null
+        let columA= null
+        let columB = null
 
+
+        switch(status){
+            case 'Calculando': 
+                statusColor='attention'; 
+                break;
+            case 'Sin Conflicto': 
+            case 'Completo':
+                statusColor='success'; 
+                columA = `$${final_price} Subtotal`
+                columB = `$${final_duty} Impuesto`
+                break;
+            case 'Conflicto':
+                statusColor='warning';
+                columA = <Button size= "slim" onClick={()=> solveVariant(id)}> Resolver </Button>
+                break;
+        }
+
+
+
+
+        const media = <Avatar customer size = "medium" source={image_url}/>
+        console.log('variants', variants)
         return (
             <ResourceItem id={id} media={media}>
-       
-       
-       
+                <Stack>
+                    <Stack.Item fill>
+                        <h3><TextStyle variantion="strong">{Title} - {variant_title}</TextStyle></h3>
+                    </Stack.Item>
+                        
+                    <Stack.Item>
+                        {columA}
+                    </Stack.Item>
+                    <Stack.Item>
+                        {columB}
+                    </Stack.Item>
 
-       
+                    <Stack.Item>
+                        <Badge status={statusColor}>{status}</Badge>
+                    </Stack.Item>
+
+                </Stack>
             </ResourceItem>
            
         )
@@ -65,6 +106,7 @@ const resourceName = {
                 />   
             </Card>
 
+            <ResolveConflict />
 
             <FooterHelp>
                 Soy Marina{''}
